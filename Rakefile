@@ -48,7 +48,8 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "ubiquitous_user #{version}"
+  rdoc.title = "Ubiquitous User #{version}"
   rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('LICENSE')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
