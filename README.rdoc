@@ -1,6 +1,25 @@
 = ubiquitous-user
 
-Description goes here.
+Many web applications required you to log in before being able to interact with
+them; which poses a real barer of entry for new users. You need users to have
+accounts for many tasks, but you don't need those accounts to be any more than
+an id. No username, no password, no profile.
+
+This library is an implementation of that. You add the Usable mixin to your
+ApplicationController and after that call user to get a user, or user! to get a
+user that exists on the database (it'll be stored if needed).
+
+When a user log ins what you have to do is set the user, which is just doing
+user = userObject.
+
+This library also provides an authorize method, to use as a filter for those
+actions that really require a logged in user.
+
+An important consideration is that users should be mergeable now. If you have
+a user with an account, and that user comes back a month latter, he may start
+to operate your site with the new ghost account and only log in latter on. At
+that moment the ghost account and the real account will be merged, basically by
+calling real_account.merge(ghost_account_id)
 
 == Note on Patches/Pull Requests
  
