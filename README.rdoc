@@ -21,6 +21,93 @@ to operate your site with the new ghost account and only log in latter on. At
 that moment the ghost account and the real account will be merged, basically by
 calling real_account.merge(ghost_account_id)
 
+== Installation
+
+This gem is provided through Gemcutter so you need to have gem configured to
+pull gems from Gemcutter.
+
+=== Enabling Gemcutter
+
+A properly configured environment would be like this:
+
+  $ gem sources
+  *** CURRENT SOURCES ***
+  
+  http://gemcutter.org
+  http://gems.rubyforge.org/
+  http://gems.github.com
+
+If you don't have http://gemcutter.org in your sources then you need to add. I
+know two ways to do. One is installing Gemcutter and running gem tumble:
+
+  $ sudo gem install gemcutter
+  $ gem tumble
+
+Be careful that gem tumble will remove Gemcutter from your repositories if it's
+already there.
+
+The other way is by hand like this:
+
+  $ gem source -a http://gemcutter.org
+
+I'm not sure if there's any difference. I think there isn't one.
+
+=== Installing ubiquitous_user manually
+
+It's simple a matter of running:
+
+  $ gem install ubiquitous_user
+
+and that's it. Let me know if something breaks.
+
+=== Installing through your Ruby on Rails project
+
+In the +environment.rb+ file of your Ruby on Rails project you'll have some
+commented out lines like this:
+
+  # config.gem "bj"
+  # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
+  # config.gem "sqlite3-ruby", :lib => "sqlite3"
+  # config.gem "aws-s3", :lib => "aws/s3"
+
+After those you can just add
+
+  config.gem "ubiquitous_user"
+
+and then run
+
+  $ rake gems:install
+
+and you'll get this and all the gems your Rails project need installed.
+Configuring your Rails project like that is something you'll need anyway, so
+this is my recommended way.
+
+== How to use it
+
+In your application_controller.rb be sure to add the mixin to
+ApplicationController, like this:
+
+  class ApplicationController < ActionController::Base
+    include Usable
+    
+    #...
+  end
+
+After that you can use user and user! anywhere, for example:
+
+  @item.recommender = user!
+  
+  <%=h user.name %>
+
+You can use user= and authorize in the controllers, for example:
+
+
+
+== Documentation
+
+Up to date documentation should be automatically generated on
+http://rdoc.info/projects/pupeno/ubiquitous_user
+
 == Note on Patches/Pull Requests
  
 * Fork the project.
