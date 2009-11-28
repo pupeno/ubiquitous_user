@@ -5,12 +5,13 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "ubiquitous-user"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = "Helpers to get and retrieve users ubiquitously"
+    gem.description = "Create accounts for users right away, even when they are anonymous."
     gem.email = "pupeno@pupeno.com"
     gem.homepage = "http://github.com/pupeno/ubiquitous-user"
     gem.authors = ["J. Pablo Fernández"]
-    gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_dependency "actionpack", ">= 2.0.0"
+    #gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
