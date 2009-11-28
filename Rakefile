@@ -4,11 +4,11 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "ubiquitous-user"
+    gem.name = "ubiquitous_user"
     gem.summary = "Helpers to get and retrieve users ubiquitously"
     gem.description = "Create accounts for users right away, even when they are anonymous."
     gem.email = "pupeno@pupeno.com"
-    gem.homepage = "http://github.com/pupeno/ubiquitous-user"
+    gem.homepage = "http://github.com/pupeno/ubiquitous_user"
     gem.authors = ["J. Pablo Fernández"]
     gem.add_dependency "actionpack", ">= 2.0.0"
     #gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
@@ -48,7 +48,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "ubiquitous-user #{version}"
+  rdoc.title = "ubiquitous_user #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end

@@ -1,4 +1,4 @@
-= ubiquitous-user
+= ubiquitous_user
 
 Many web applications required you to log in before being able to interact with
 them; which poses a real barer of entry for new users. You need users to have
