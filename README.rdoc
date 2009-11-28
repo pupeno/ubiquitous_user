@@ -101,11 +101,38 @@ After that you can use user and user! anywhere, for example:
 
 You can use user= and authorize in the controllers, for example:
 
+  class SessionsController < ApplicationController
+    def destroy
+      self.user = nil
+      # ...
+    end
+    
+    def create
+      # ...
+      self.user = user
+    end
+    
+    # ...
+  end
+  
+  class ProfilesController < ApplicationController
+    before_filter :authorize
+    # ...
+  end
 
+== Customize
 
-== Documentation
+ubiquitous_user expects your user model to be named User. That's not
+configurable yet. What is configurable is the two methods it calls on user. You
+can do this kind of configuration in config/initializers/ubiquitous_user.rb for
+example:
 
-Up to date documentation should be automatically generated on
+  Usable::UserModelSave = :save_bypassing_non_essential_validation
+  Usable::UserModelName = :name_or_else
+
+== API Documentation
+
+Up to date api documentation should be automatically generated on
 http://rdoc.info/projects/pupeno/ubiquitous_user
 
 == Note on Patches/Pull Requests
