@@ -15,7 +15,7 @@ module UsableHelpers
     if options[:create]
       # Save the user in the database and set the session user_id for latter.
       # TODO use UsableConfig::UserModelSave
-      @ubiquitous_user.save_bypassing_non_essential_validation
+      @ubiquitous_user.send(Usable::UserModelSave)
       session[:user_id] = @ubiquitous_user.id
     end
     return @ubiquitous_user
@@ -34,9 +34,12 @@ end
 module Usable
   include UsableHelpers
   
+  UserModelSave = :save
+  UserModelName = :name
+  
   def user=(u)
-    session[:user_id] = u and u.id or nil
-    session[:user_name] = u and u.name or nil
+    session[:user_id] = u != nil ? u.id : nil
+    session[:user_name] = u != nil ? u.send(UserModelName) : nil
     user
   end
   
