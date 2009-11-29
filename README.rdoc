@@ -18,8 +18,7 @@ actions that really require a logged in user.
 An important consideration is that users should be mergeable now. If you have
 a user with an account, and that user comes back a month latter, he may start
 to operate your site with the new ghost account and only log in latter on. At
-that moment the ghost account and the real account will be merged, basically by
-calling real_account.merge(ghost_account_id)
+that moment you should merge the accounts.
 
 == Installation
 
