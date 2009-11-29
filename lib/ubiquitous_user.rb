@@ -1,3 +1,15 @@
+module UsableConfig
+  @user_model_save = :save
+  @user_model_name = :name
+  
+  # Method used to save the user.
+  attr_accessor :user_model_save
+  # Method used to get the name of the user.
+  attr_accessor :user_model_name
+  
+  module_function :user_model_save, :user_model_save=, :user_model_name, :user_model_name=
+end
+
 module UsableHelpers
   # Helper method to get the current user. It will always return a user but the
   # user may not be in the database. If options[:create] is true, then the user
@@ -14,8 +26,7 @@ module UsableHelpers
     @ubiquitous_user = User.new()
     if options[:create]
       # Save the user in the database and set the session user_id for latter.
-      # TODO use UsableConfig::UserModelSave
-      @ubiquitous_user.send(Usable::UserModelSave)
+      @ubiquitous_user.send(UsableConfig::user_model_save)
       session[:user_id] = @ubiquitous_user.id
     end
     return @ubiquitous_user
@@ -34,12 +45,9 @@ end
 module Usable
   include UsableHelpers
   
-  UserModelSave = :save
-  UserModelName = :name
-  
   def user=(u)
     session[:user_id] = u != nil ? u.id : nil
-    session[:user_name] = u != nil ? u.send(UserModelName) : nil
+    session[:user_name] = u != nil ? u.send(UsableConfig::user_model_name) : nil
     user
   end
   

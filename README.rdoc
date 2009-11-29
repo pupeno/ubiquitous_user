@@ -126,8 +126,8 @@ configurable yet. What is configurable is the two methods it calls on user. You
 can do this kind of configuration in config/initializers/ubiquitous_user.rb for
 example:
 
-  Usable::UserModelSave = :save_bypassing_non_essential_validation
-  Usable::UserModelName = :name_or_else
+  UsableConfig::user_model_save = :save_bypassing_non_essential_validation
+  UsableConfig::user_model_name = :name_or_else
 
 == API Documentation
 
