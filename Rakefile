@@ -11,6 +11,7 @@ begin
     gem.homepage = "http://github.com/pupeno/ubiquitous_user"
     gem.authors = ["J. Pablo Fernández"]
     gem.add_dependency "actionpack", ">= 2.0.0"
+    gem.files = %w(LICENSE README.rdoc Rakefile VERSION) + Dir.glob("{lib,generators}/**/*")
     #gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

@@ -1,0 +1,9 @@
+Thank you for trying ubiquitous_user. To get all the magic going you need to
+add usable to your application_controller.rb, something like:
+
+class ApplicationController < ActionController::Base
+  include Usable
+  #...
+end
+
+For more information see: http://github.com/pupeno/ubiquitous_user
