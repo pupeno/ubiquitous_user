@@ -119,6 +119,17 @@ You can use user= and authorize in the controllers, for example:
     # ...
   end
 
+== The model
+
+Ubiquitous User expects you to have a model for your users called User
+(configurable) with a name field (also configurable). You could create such a
+model with the following command:
+
+  ./script/generate model User name:string
+
+The name can be the real name, the username or anything. Ubiquitous user doesn't
+make any assumptions about how you authenticate users.
+
 == Customize
 
 ubiquitous_user expects your user model to be named User. That's not
