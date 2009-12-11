@@ -27,27 +27,26 @@ module UsableHelpers
   # Helper method to get the current user. It will always return a user but the
   # user may not be in the database. If options[:create] is true, then the user
   # will be in the database (although it may be a ghost user).
-  def user(options = {:create => false})
-    # If we already have a user object, return that.
-    return @ubiquitous_user if @ubiquitous_user != nil
+  def user(options = {:save => false})
+    # Find the user in the database if session[:user_id] is defined and @ubiquitous_user is not.
+    @ubiquitous_user = UsableConfig::user_model_class.find(session[:user_id]) if session[:user_id] != nil and @ubiquitous_user == nil
     
-    # Try to find the user in the database if session[:user_id] is defined.
-    @ubiquitous_user = UsableConfig::user_model_class.find(session[:user_id]) if session[:user_id] != nil
-    return @ubiquitous_user if @ubiquitous_user != nil
+    # Create a new user object if @ubiquitous_user is not defined.
+    @ubiquitous_user = UsableConfig::user_model_class.send(UsableConfig::user_model_new)  if @ubiquitous_user == nil
     
-    # Create a new user object.
-    @ubiquitous_user = UsableConfig::user_model_class.send(UsableConfig::user_model_new)
-    if options[:create]
+    # If the object is new and we are asked to save, do it.
+    if @ubiquitous_user.new_record? and options[:save]
       # Save the user in the database and set the session user_id for latter.
       @ubiquitous_user.send(UsableConfig::user_model_save)
       session[:user_id] = @ubiquitous_user.id
     end
+    
     return @ubiquitous_user
   end
   
   # Helper method to get a user that for sure exists on the database.
   def user!
-    return user(:create => true)
+    return user(:save => true)
   end
 end
 
