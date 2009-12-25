@@ -60,7 +60,11 @@ module UsableClass
       unless controller.is_user_logged_in
         # flash, redirect_to and new_session_url are protected. Thank god this is Ruby, not Java.
         controller.send(:flash)[key] = message
-        controller.send(:redirect_to, controller.send(:new_session_url))
+        begin
+          controller.send(:redirect_to, :back)
+        rescue ActionController::RedirectBackError
+          controller.send(:redirect_to, controller.send(:new_session_url))
+        end
       end
     end
   end
