@@ -54,6 +54,19 @@ ActionController::Base.class_eval do
   helper UsableHelpers
 end
 
+module UsableClass
+  def authorize(message = "Please log in.", key = :notice)
+    Proc.new do |controller|
+      unless controller.is_user_logged_in
+        # flash, redirect_to and new_session_url are protected. Thank god this is Ruby, not Java.
+        controller.send(:flash)[key] = message
+        controller.send(:redirect_to, controller.send(:new_session_url))
+      end
+    end
+  end
+  module_function :authorize
+end
+
 module Usable
   include UsableHelpers
   
@@ -68,21 +81,6 @@ module Usable
   end
   
   def authorize
-    unless is_user_logged_in
-      flash[:notice] = "Please log in."
-      redirect_to new_session_url
-    end
-  end
-end
-
-module UsableClass
-  def authorize(message = "Please log in.", key = :notice)
-    Proc.new do |controller|
-      unless controller.is_user_logged_in
-        # flash, redirect_to and new_session_url are protected. Thank god this is Ruby, not Java.
-        controller.send(:flash)[key] = message
-        controller.send(:redirect_to, controller.send(:new_session_url))
-      end
-    end
+    ::UsableClass.authorize().call(self)
   end
 end
