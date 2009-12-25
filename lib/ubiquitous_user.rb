@@ -55,7 +55,7 @@ ActionController::Base.class_eval do
 end
 
 module UsableClass
-  def authorize(message = "Please log in.", key = :notice)
+  def authorize(message = "Please log in.", key = :warning)
     Proc.new do |controller|
       unless controller.is_user_logged_in
         # flash, redirect_to and new_session_url are protected. Thank god this is Ruby, not Java.
