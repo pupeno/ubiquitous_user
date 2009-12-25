@@ -119,6 +119,15 @@ You can use user= and authorize in the controllers, for example:
     # ...
   end
 
+Another interesting method is the authorize generator, which allows you to
+specify the message you want to give the authorization is not granted. For
+example:
+
+  class ProfilesController < ApplicationController
+    before_filter :only => [:edit, :update], &authorize("You gotta log in to do that!")
+    # ...
+  end
+
 == The model
 
 Ubiquitous User expects you to have a model for your users called User

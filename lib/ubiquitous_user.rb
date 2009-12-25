@@ -63,10 +63,27 @@ module Usable
     user
   end
   
+  def is_user_logged_in
+    UsableConfig::user_model_class.find_by_id(session[:user_id]) and session[:user_name] != nil
+  end
+  
   def authorize
-    unless UsableConfig::user_model_class.find_by_id(session[:user_id]) and session[:user_name] != nil
+    unless is_user_logged_in
       flash[:notice] = "Please log in."
       redirect_to new_session_url
+    end
+  end
+  
+  def self.authorize(message = nil, key = :notice)
+    if message == nil
+      authorize("Please log in")
+    else
+      Proc.new do |controller|
+        unless controller.is_user_logged_in
+          controller.send(:flash)[key] = message
+          controller.send(:redirect_to, controller.send(:new_session_url))
+        end
+      end
     end
   end
 end
