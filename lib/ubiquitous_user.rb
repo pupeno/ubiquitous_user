@@ -76,15 +76,12 @@ module Usable
 end
 
 module UsableClass
-  def authorize(message = nil, key = :notice)
-    if message == nil
-      authorize("Please log in.")
-    else
-      Proc.new do |controller|
-        unless controller.is_user_logged_in
-          controller.send(:flash)[key] = message
-          controller.send(:redirect_to, controller.send(:new_session_url))
-        end
+  def authorize(message = "Please log in.", key = :notice)
+    Proc.new do |controller|
+      unless controller.is_user_logged_in
+        # flash, redirect_to and new_session_url are protected. Thank god this is Ruby, not Java.
+        controller.send(:flash)[key] = message
+        controller.send(:redirect_to, controller.send(:new_session_url))
       end
     end
   end
