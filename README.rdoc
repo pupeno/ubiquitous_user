@@ -128,6 +128,15 @@ example:
     # ...
   end
 
+But for that you also need to add an "extend", like this:
+
+  class ApplicationController < ActionController::Base
+    include Usable
+    extend UsableClass
+    
+    #...
+  end
+
 == The model
 
 Ubiquitous User expects you to have a model for your users called User

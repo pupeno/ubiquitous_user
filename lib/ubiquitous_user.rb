@@ -73,10 +73,12 @@ module Usable
       redirect_to new_session_url
     end
   end
-  
-  def self.authorize(message = nil, key = :notice)
+end
+
+module UsableClass
+  def authorize(message = nil, key = :notice)
     if message == nil
-      authorize("Please log in")
+      authorize("Please log in.")
     else
       Proc.new do |controller|
         unless controller.is_user_logged_in
