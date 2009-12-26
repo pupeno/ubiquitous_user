@@ -82,7 +82,7 @@ module Usable
   def user=(u)
     session[:user_id] = u != nil ? u.id : nil
     session[:user_name] = u != nil ? u.send(UsableConfig::user_model_name) : nil
-    user
+    @ubiquitous_user = u
   end
   
   def authorize
