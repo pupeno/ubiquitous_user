@@ -79,10 +79,10 @@ end
 module Usable
   include UsableHelpers
   
-  def user=(u)
-    session[:user_id] = u != nil ? u.id : nil
-    session[:user_name] = u != nil ? u.send(UsableConfig::user_model_name) : nil
-    @ubiquitous_user = u
+  def user=(new_user)
+    session[:user_id] = new_user != nil ? new_user.id : nil
+    session[:user_name] = new_user != nil ? new_user.send(UsableConfig::user_model_name) : nil
+    @ubiquitous_user = new_user
   end
   
   def authorize
