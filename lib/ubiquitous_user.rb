@@ -48,6 +48,11 @@ module UsableHelpers
   def user!
     return user(:save => true)
   end
+  
+  # Helper method to check whether a user is logged in or not
+  def user_logged_in?
+    UsableConfig::user_model_class.find_by_id(session[:user_id]) != nil and session[:user_name] != nil
+  end
 end
 
 ActionController::Base.class_eval do
@@ -57,7 +62,7 @@ end
 module UsableClass
   def authorize(message = "Please log in.", key = :warning)
     Proc.new do |controller|
-      unless controller.is_user_logged_in
+      unless controller.user_logged_in?
         # flash, redirect_to and new_session_url are protected. Thank god this is Ruby, not Java.
         controller.send(:flash)[key] = message
         begin
@@ -78,10 +83,6 @@ module Usable
     session[:user_id] = u != nil ? u.id : nil
     session[:user_name] = u != nil ? u.send(UsableConfig::user_model_name) : nil
     user
-  end
-  
-  def is_user_logged_in
-    UsableConfig::user_model_class.find_by_id(session[:user_id]) and session[:user_name] != nil
   end
   
   def authorize
