@@ -30,25 +30,43 @@ class Controller
   include Usable
   extend UsableClass
   
+  # Simulate session
   def initialize
     @session = {}
   end
-  
   attr_accessor :session
+  
+  # Allow access to @ubiquitous_user, only for testing purposes.
+  attr_accessor :ubiquitous_user
 end
 
 class TestUbiquitousUser < Test::Unit::TestCase
-  context "A controller" do
+  context "A controller and a mock user" do
     setup do
       @controller = Controller.new
+      @user = mock("User")
+      
+      # Just to be sure we are starting from scratch
+      assert_nil @controller.ubiquitous_user
     end
     
     should "create a new user object on #user" do
-      # Mock user.
-      user = mock("User")
-      User.expects(:new).returns(user)
-      
-      assert_equal user, @controller.user
+      User.expects(:new).returns(@user)
+      assert_equal @user, @controller.user
+      assert_equal @user, @controller.ubiquitous_user
+    end
+    
+    should "should return previous user object on #user" do
+      @controller.ubiquitous_user = @user
+      assert_equal @user, @controller.user
+    end
+    
+    should "find a user on #user if there's a user_id on session" do
+      user_id = 42
+      @controller.session[:user_id] = user_id
+      User.expects(:find).with(user_id).returns(@user)
+      assert_equal @user, @controller.user
+      assert_equal @user, @controller.ubiquitous_user
     end
     
     should "create a new user object on #user respecting the config" do
@@ -58,10 +76,10 @@ class TestUbiquitousUser < Test::Unit::TestCase
       UsableConfig.user_model_new = :new_person
       
       # Mock user.
-      user = mock("User")
-      Person.expects(:new_person).returns(user)
+      Person.expects(:new_person).returns(@user)
       
-      assert_equal user, @controller.user
+      assert_equal @user, @controller.user
+      assert_equal @user, @controller.ubiquitous_user
       
       # Restore user model.
       UsableConfig.user_model = orig_config.user_model
