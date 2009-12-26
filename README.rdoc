@@ -165,6 +165,11 @@ example:
 Up to date api documentation should be automatically generated on
 http://rdoc.info/projects/pupeno/ubiquitous_user
 
+== Metrics
+
+You con find the metrics for this gem automatically generated at
+http://getcaliper.com/caliper/project?repo=git%3A%2F%2Fgithub.com%2Fpupeno%2Fubiquitous_user.git
+
 == Note on Patches/Pull Requests
  
 * Fork the project.
