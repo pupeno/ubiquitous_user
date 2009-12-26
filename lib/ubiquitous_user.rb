@@ -32,7 +32,7 @@ module UsableHelpers
     @ubiquitous_user = UsableConfig::user_model_class.find(session[:user_id]) if session[:user_id] != nil and @ubiquitous_user == nil
     
     # Create a new user object if @ubiquitous_user is not defined.
-    @ubiquitous_user = UsableConfig::user_model_class.send(UsableConfig::user_model_new)  if @ubiquitous_user == nil
+    @ubiquitous_user = UsableConfig::user_model_class.send(UsableConfig::user_model_new) if @ubiquitous_user == nil
     
     # If the object is new and we are asked to save, do it.
     if options[:save] and @ubiquitous_user.new_record?
