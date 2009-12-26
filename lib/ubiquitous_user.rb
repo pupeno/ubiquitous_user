@@ -35,7 +35,7 @@ module UsableHelpers
     @ubiquitous_user = UsableConfig::user_model_class.send(UsableConfig::user_model_new)  if @ubiquitous_user == nil
     
     # If the object is new and we are asked to save, do it.
-    if @ubiquitous_user.new_record? and options[:save]
+    if options[:save] and @ubiquitous_user.new_record?
       # Save the user in the database and set the session user_id for latter.
       @ubiquitous_user.send(UsableConfig::user_model_save)
       session[:user_id] = @ubiquitous_user.id
