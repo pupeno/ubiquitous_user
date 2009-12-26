@@ -1,7 +1,7 @@
 module UsableConfig
   @user_model = :User
   @user_model_new = :new
-  @user_model_save = :save
+  @user_model_save = :save!
   @user_model_name = :name
   
   # Class that defines the user model.
