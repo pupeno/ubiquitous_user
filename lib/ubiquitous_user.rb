@@ -51,7 +51,7 @@ module UsableHelpers
   
   # Helper method to check whether a user is logged in or not
   def user_logged_in?
-    UsableConfig::user_model_class.find_by_id(session[:user_id]) != nil and session[:user_name] != nil
+    session[:user_id] != nil and UsableConfig::user_model_class.find_by_id(session[:user_id]) != nil and session[:user_name] != nil
   end
 end
 
