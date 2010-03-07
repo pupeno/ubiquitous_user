@@ -1,3 +1,6 @@
+# coding: utf-8
+# Copyright 2010 J. Pablo Fernández
+
 module UsableConfig
   @user_model = :User
   @user_model_new = :new

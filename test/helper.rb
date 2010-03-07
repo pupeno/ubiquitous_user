@@ -1,3 +1,6 @@
+# coding: utf-8
+# Copyright 2010 J. Pablo Fernández
+
 require 'rubygems'
 require 'test/unit'
 require 'shoulda'
