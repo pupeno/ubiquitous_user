@@ -15,10 +15,14 @@ user = userObject.
 This library also provides an authorize method, to use as a filter for those
 actions that really require a logged in user.
 
-An important consideration is that users should be mergeable now. If you have
-a user with an account, and that user comes back a month latter, he may start
-to operate your site with the new ghost account and only log in latter on. At
-that moment you should merge the accounts.
+The user model and how to authenticate is your responsibility; ubiquity_user
+doesn't try solve those problem (not yet at least). I may recommend
+{rails_openid}[http://github.com/pupeno/rails_openid] for authentication, but
+maybe it's only because I wrote it.
+
+Since people just accessing your web site will have a user, people that is
+already registered at your web site may have an anonymous user with activity in
+it. You should try to merge it.
 
 == Installation
 
@@ -123,7 +127,7 @@ You can use user= and authorize in the controllers, for example:
   end
 
 Another interesting method is the authorize generator, which allows you to
-specify the message you want to give the authorization is not granted. For
+specify the message you want to give when the authorization is not granted. For
 example:
 
   class ProfilesController < ApplicationController
