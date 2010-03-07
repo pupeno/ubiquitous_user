@@ -22,34 +22,23 @@ that moment you should merge the accounts.
 
 == Installation
 
-This gem is provided through Gemcutter so you need to have gem configured to
-pull gems from Gemcutter.
+This gem is provided through RubyGems.org so you need to have gem configured to
+pull gems from RubyGems.org.
 
-=== Enabling Gemcutter
+=== Enabling RubyGems.org (formerly known as GemCutter)
 
-A properly configured environment would be like this:
+You can skip this if you have RubyGems.org enabled (which is going to be the
+default in the future anyway). A properly configured environment should list
+rubygems.org or gemcutter.org in the gem sources, like:
 
   $ gem sources
   *** CURRENT SOURCES ***
-  
-  http://gemcutter.org
-  http://gems.rubyforge.org/
-  http://gems.github.com
 
-If you don't have http://gemcutter.org in your sources then you need to add. I
-know two ways to do. One is installing Gemcutter and running gem tumble:
+  http://rubygems.org/
 
-  $ sudo gem install gemcutter
-  $ gem tumble
+If you don't have it, you can probably add it this way:
 
-Be careful that gem tumble will remove Gemcutter from your repositories if it's
-already there.
-
-The other way is by hand like this:
-
-  $ gem source -a http://gemcutter.org
-
-I'm not sure if there's any difference. I think there isn't one.
+  $ gem source -a http://rubygems.org/
 
 === Installing ubiquitous_user manually
 
@@ -59,7 +48,21 @@ It's simple a matter of running:
 
 and that's it. Let me know if something breaks.
 
-=== Installing through your Ruby on Rails project
+=== Installing through your Ruby on Rails 3 project
+
+In the +Gemfile+ file of your Ruby on Rails project you'll need to add:
+
+  gem "ubiquitous_user"
+
+after that run
+
+  bundle install
+
+and watch the magic happen, all required gems will be installed. Configuring
+your Rails project like that is something you'll need anyway, so this is my
+recommended way.
+
+=== Installing through your Ruby on Rails 2.3 project
 
 In the +environment.rb+ file of your Ruby on Rails project you'll have some
 commented out lines like this:
