@@ -6,8 +6,9 @@ accounts for many tasks, but you don't need those accounts to be any more than
 an id. No username, no password, no profile.
 
 This library is an implementation of that. You add the Usable mixin to your
-ApplicationController and after that call user to get a user, or user! to get a
-user that exists on the database (it'll be stored if needed).
+ApplicationController and after that call user to get a user. When a new user
+is saved, it'll automatically store the session[:user_id] in the controller to
+mark this new user as the logged in user.
 
 When a user log ins what you have to do is set the user, which is just doing
 user = userObject.
@@ -99,10 +100,12 @@ ApplicationController, like this:
     #...
   end
 
-After that you can use user and user! anywhere, for example:
+After that you can use user anywhere, for example:
 
-  @item.recommender = user!
-  
+  @item.recommender = user
+
+or
+
   <%=h user.name %>
 
 You can use user= and authorize in the controllers, for example:

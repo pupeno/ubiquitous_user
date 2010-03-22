@@ -30,26 +30,30 @@ module UsableHelpers
   # Helper method to get the current user. It will always return a user but the
   # user may not be in the database. If options[:create] is true, then the user
   # will be in the database (although it may be a ghost user).
-  def user(options = {:save => false})
+  def user
     # Find the user in the database if session[:user_id] is defined and @ubiquitous_user is not.
     @ubiquitous_user = UsableConfig::user_model_class.find_by_id(session[:user_id]) if session[:user_id] != nil and @ubiquitous_user == nil
     
     # Create a new user object if @ubiquitous_user is not defined.
     @ubiquitous_user = UsableConfig::user_model_class.send(UsableConfig::user_model_new) if @ubiquitous_user == nil
     
-    # If the object is new and we are asked to save, do it.
-    if options[:save] and @ubiquitous_user.new_record?
-      # Save the user in the database and set the session user_id for latter.
-      @ubiquitous_user.send(UsableConfig::user_model_save)
-      session[:user_id] = @ubiquitous_user.id
+    # If the object is new, let's get ready to mark the user as logged in when saving.
+    if @ubiquitous_user.new_record? or @ubiquitous_user.id != session[:user_id]
+      @ubiquitous_user.instance_variable_set :@ubiquitous_user_controller, self
+      # TODO: save a previous after_save and call it.
+      def @ubiquitous_user.after_save
+        @ubiquitous_user_controller.session[:user_id] = self.id
+      end
     end
     
     return @ubiquitous_user
   end
   
-  # Helper method to get a user that for sure exists on the database.
+  # <b>DEPRECATED:</b> Please use <tt>user</tt> instead. Call
+  # <tt>user.save!</tt> if you really needed it saved.
   def user!
-    return user(:save => true)
+    warn "[DEPRECATION] use 'user' instead, call 'user.save!' if you really needed it saved"
+    return user
   end
   
   # Helper method to check whether a user is logged in or not

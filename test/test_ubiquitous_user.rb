@@ -14,6 +14,7 @@ class TestUbiquitousUser < Test::Unit::TestCase
     end
     
     should "create a new user object on Controller#user" do
+      @user.expects(:new_record?).returns(true)
       User.expects(:new).returns(@user)
       
       user = @controller.user
@@ -23,6 +24,7 @@ class TestUbiquitousUser < Test::Unit::TestCase
     end
     
     should "should return previous user object on Controller#user" do
+      @user.expects(:new_record?).returns(true)
       @controller.ubiquitous_user = @user
       
       user = @controller.user
@@ -33,6 +35,7 @@ class TestUbiquitousUser < Test::Unit::TestCase
     should "find a user on Controller#user if there's a user_id on session" do
       user_id = 42
       @controller.session[:user_id] = user_id
+      @user.expects(:new_record?).returns(true)
       User.expects(:find_by_id).with(user_id).returns(@user)
       
       user = @controller.user
@@ -41,31 +44,35 @@ class TestUbiquitousUser < Test::Unit::TestCase
       assert_equal @user, @controller.ubiquitous_user
     end
     
-    should "save a new user when requested on Controller#user" do
+    should "set the session user_id when saving a user" do
       user_id = 43
       User.expects(:new).returns(@user)
       @user.expects(:new_record?).returns(true)
       @user.expects(:save!)
       @user.expects(:id).returns(user_id)
-      
-      user = @controller.user!
-      
+
+      user = @controller.user
+      user.save!
+      # save! should be calling after_save, but it isn't because it's a mock, so
+      # let's call it manually
+      user.after_save
+
       assert_equal @user, user
       assert_equal @user, @controller.ubiquitous_user
       assert_equal user_id, @controller.session[:user_id]
     end
-    
-    should "not save an existing user even when requested on Controller#user" do
-      user_id = 44
-      @controller.session[:user_id] = user_id
-      User.expects(:find_by_id).with(user_id).returns(@user)
-      @user.expects(:new_record?).returns(false)
-      
-      user = @controller.user!
-      
-      assert_equal @user, user
-      assert_equal @user, @controller.ubiquitous_user
-    end
+#
+#    should "not save an existing user even when requested on Controller#user" do
+#      user_id = 44
+#      @controller.session[:user_id] = user_id
+#      User.expects(:find_by_id).with(user_id).returns(@user)
+#      @user.expects(:new_record?).returns(false)
+#
+#      user = @controller.user!
+#
+#      assert_equal @user, user
+#      assert_equal @user, @controller.ubiquitous_user
+#    end
     
     should "set user on Controller#user=" do
       user_id = 45
@@ -171,21 +178,22 @@ class TestUbiquitousUser < Test::Unit::TestCase
       end
       
       should "create a new user object on #user" do
+        @user.expects(:new_record?).returns(true)
         Person.expects(:new_person).returns(@user)
         assert_equal @user, @controller.user
         assert_equal @user, @controller.ubiquitous_user
       end
       
-      should "save a new user when requested on #user" do
-        user_id = 43
-        Person.expects(:new_person).returns(@user)
-        @user.expects(:new_record?).returns(true)
-        @user.expects(:save_person!)
-        @user.expects(:id).returns(user_id)
-        assert_equal @user, @controller.user!
-        assert_equal @user, @controller.ubiquitous_user
-        assert_equal user_id, @controller.session[:user_id]
-      end
+#      should "save a new user when requested on #user" do
+#        user_id = 43
+#        Person.expects(:new_person).returns(@user)
+#        @user.expects(:new_record?).returns(true)
+#        @user.expects(:save_person!)
+#        @user.expects(:id).returns(user_id)
+#        assert_equal @user, @controller.user!
+#        assert_equal @user, @controller.ubiquitous_user
+#        assert_equal user_id, @controller.session[:user_id]
+#      end
       
       should "set user on Controller#user=" do
         user_id = 45
