@@ -1,6 +1,9 @@
 ## MAC OS
 .DS_Store
 
+## NetBeans
+nbproject
+
 ## TEXTMATE
 *.tmproj
 tmtags
@@ -19,5 +22,6 @@ rdoc
 pkg
 *.gemspec
 .bundle
+tmp
 
 ## PROJECT::SPECIFIC
