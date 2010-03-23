@@ -40,6 +40,7 @@ module UsableHelpers
     # If the object is new, let's get ready to mark the user as logged in when saving.
     if @ubiquitous_user.new_record? or @ubiquitous_user.id != session[:user_id]
       controller = self
+      # Read more about this technique on http://stackoverflow.com/questions/2495550/define-a-method-that-is-a-closure-in-ruby
       klass = class << @ubiquitous_user; self; end
       klass.send(:define_method, :after_save) do
         super
