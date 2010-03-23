@@ -50,6 +50,7 @@ class TestUbiquitousUser < Test::Unit::TestCase
       @user.expects(:new_record?).returns(true)
       @user.expects(:save!)
       @user.expects(:id).returns(user_id)
+      @user.expects(:after_save)
 
       user = @controller.user
       user.save!

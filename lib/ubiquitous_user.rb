@@ -39,10 +39,11 @@ module UsableHelpers
     
     # If the object is new, let's get ready to mark the user as logged in when saving.
     if @ubiquitous_user.new_record? or @ubiquitous_user.id != session[:user_id]
-      @ubiquitous_user.instance_variable_set :@ubiquitous_user_controller, self
-      # TODO: save a previous after_save and call it.
-      def @ubiquitous_user.after_save
-        @ubiquitous_user_controller.session[:user_id] = self.id
+      controller = self
+      klass = class << @ubiquitous_user; self; end
+      klass.send(:define_method, :after_save) do
+        super
+        controller.session[:user_id] = self.id
       end
     end
     
