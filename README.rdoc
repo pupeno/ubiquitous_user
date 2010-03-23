@@ -25,6 +25,14 @@ Since people just accessing your web site will have a user, people that is
 already registered at your web site may have an anonymous user with activity in
 it. You should try to merge it.
 
+== Where?
+
+The canonical places for this gem are:
+
+* http://github.com/pupeno/ubiquitous_user
+* http://rubygems.org/gems/ubiquitous_user
+* http://rdoc.info/projects/pupeno/ubiquitous_user
+
 == Installation
 
 This gem is provided through RubyGems.org so you need to have gem configured to
