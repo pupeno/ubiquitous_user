@@ -4,6 +4,9 @@
 ## NetBeans
 nbproject
 
+## RubyMine
+.idea
+
 ## TEXTMATE
 *.tmproj
 tmtags
