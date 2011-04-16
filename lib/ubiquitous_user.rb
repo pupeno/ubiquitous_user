@@ -51,13 +51,6 @@ module UsableHelpers
     return @ubiquitous_user
   end
   
-  # <b>DEPRECATED:</b> Please use <tt>user</tt> instead. Call
-  # <tt>user.save!</tt> if you really needed it saved.
-  def user!
-    warn "[DEPRECATION] use 'user' instead, call 'user.save!' if you really needed it saved"
-    return user
-  end
-  
   # Helper method to check whether a user is logged in or not
   def user_logged_in?
     user_id = session[:user_id]
