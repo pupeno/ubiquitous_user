@@ -30,7 +30,7 @@ module UsableHelpers
   # Helper method to get the current user. It will always return a user but the
   # user may not be in the database. If options[:create] is true, then the user
   # will be in the database (although it may be a ghost user).
-  def user
+  def current_user
     # Find the user in the database if session[:user_id] is defined and @ubiquitous_user is not.
     @ubiquitous_user = UsableConfig::user_model_class.find_by_id(session[:user_id]) if session[:user_id] != nil and @ubiquitous_user == nil
     
@@ -88,8 +88,8 @@ end
 
 module Usable
   include UsableHelpers
-  
-  def user=(new_user)
+
+  def current_user=(new_user)
     session[:user_id] = new_user != nil ? new_user.id : nil
     session[:user_name] = new_user != nil ? new_user.send(UsableConfig::user_model_name) : nil
     @ubiquitous_user = new_user
