@@ -6,7 +6,7 @@ module UsableConfig
   @user_model_new = :new
   @user_model_save = :save!
   @user_model_name = :name
-  
+
   # Class that defines the user model.
   attr_accessor :user_model
   module_function :user_model, :user_model=
@@ -33,10 +33,10 @@ module UsableHelpers
   def current_user
     # Find the user in the database if session[:user_id] is defined and @ubiquitous_user is not.
     @ubiquitous_user = UsableConfig::user_model_class.find_by_id(session[:user_id]) if session[:user_id] != nil and @ubiquitous_user == nil
-    
+
     # Create a new user object if @ubiquitous_user is not defined.
     @ubiquitous_user = UsableConfig::user_model_class.send(UsableConfig::user_model_new) if @ubiquitous_user == nil
-    
+
     # If the object is new, let's get ready to mark the user as logged in when saving.
     if @ubiquitous_user.new_record? or @ubiquitous_user.id != session[:user_id]
       controller = self
@@ -47,7 +47,7 @@ module UsableHelpers
         controller.session[:user_id] = self.id
       end
     end
-    
+
     return @ubiquitous_user
   end
   
