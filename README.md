@@ -13,7 +13,7 @@ session[:user_id] in the controller to mark this new user as the logged in user.
 
 When a user logs in what you have to do is set the user, which is just doing
 
-  current_user = userObject
+    current_user = userObject
 
 The user model and how to authenticate is your responsibility; ubiquity_user
 doesn't try solve those problem.
