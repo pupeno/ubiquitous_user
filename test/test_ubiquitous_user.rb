@@ -4,76 +4,33 @@
 require "helper"
 
 class TestUbiquitousUser < Test::Unit::TestCase
-  context "A controller and a mock user" do
+  context "A controller" do
     setup do
       @controller = Controller.new
-      @user = mock("User")
-
       # Just to be sure we are starting from scratch
       assert_nil @controller.ubiquitous_user
+      assert_nil @controller.session[:user_id]
     end
 
     should "create a new user object on current_user" do
-      @user.expects(:new_record?).returns(true)
-      User.expects(:new).returns(@user)
-
       user = @controller.current_user
-
-      assert_equal @user, user
-      assert_equal @user, @controller.ubiquitous_user
-    end
-
-    should "should return previous user object on current_user" do
-      @user.expects(:new_record?).returns(true)
-      @controller.ubiquitous_user = @user
-
-      user = @controller.current_user
-
-      assert_equal @user, user
+      assert_equal User, user.class
+      assert_equal @controller.ubiquitous_user, user
+      assert user.new_record?
     end
 
     should "find a user on current_user if there's a user_id on session" do
-      user_id = 42
-      @controller.session[:user_id] = user_id
-      @user.expects(:new_record?).returns(true)
-      User.expects(:find_by_id).with(user_id).returns(@user)
-
+      @controller.session[:user_id] = 42
       user = @controller.current_user
-
-      assert_equal @user, user
-      assert_equal @user, @controller.ubiquitous_user
+      assert_equal @controller.session[:user_id], user.id
     end
 
     should "set the session user_id when saving a user" do
-      user_id = 43
-      User.expects(:new).returns(@user)
-      @user.expects(:new_record?).returns(true)
-      @user.expects(:save!)
-      @user.expects(:id).returns(user_id)
-      @user.expects(:after_save)
-
       user = @controller.current_user
       user.save!
-      # save! should be calling after_save, but it isn't because it's a mock, so
-      # let's call it manually
-      user.after_save
-
-      assert_equal @user, user
-      assert_equal @user, @controller.ubiquitous_user
-      assert_equal user_id, @controller.session[:user_id]
-    end
-
-    should "set user on current_user=" do
-      user_id = 45
-      user_name = "Alex"
-      @user.expects(:id).returns(user_id)
-      @user.expects(:name).returns(user_name)
-
-      @controller.current_user = @user
-
-      assert_equal @user, @controller.ubiquitous_user
-      assert_equal user_id, @controller.session[:user_id]
-      assert_equal user_name, @controller.session[:user_name]
+      assert_not_nil user.id
+      assert_not_nil @controller.session[:user_id]
+      assert_equal user.id, @controller.session[:user_id]
     end
 
     should "unset user on current_user=(nil)" do
@@ -81,7 +38,33 @@ class TestUbiquitousUser < Test::Unit::TestCase
 
       assert_equal nil, @controller.ubiquitous_user
       assert_equal nil, @controller.session[:user_id]
-      assert_equal nil, @controller.session[:user_name]
+    end
+
+    context "and a user" do
+      setup do
+        @user = User.new
+        assert_nil @user.id
+      end
+
+      should "should return previous user object on current_user" do
+        @controller.ubiquitous_user = @user
+        assert_equal @user, @controller.current_user
+        assert_nil @controller.session[:user_id]
+      end
+
+      context "that is saved" do
+        setup do
+          @user.save!
+          assert_not_nil @user.id
+        end
+
+        should "set user on current_user=" do
+          @controller.current_user = @user
+
+          assert_equal @user, @controller.ubiquitous_user
+          assert_equal @user.id, @controller.session[:user_id]
+        end
+      end
     end
 
     context "with custom config" do
@@ -89,35 +72,16 @@ class TestUbiquitousUser < Test::Unit::TestCase
         @orig_config = UbiquitousUser::Config.clone
         UbiquitousUser::Config.user_model = :Person
         UbiquitousUser::Config.user_model_new = :new_person
-        UbiquitousUser::Config.user_model_save = :save_person!
-        UbiquitousUser::Config.user_model_name = :full_name
       end
 
       teardown do
         UbiquitousUser::Config.user_model = @orig_config.user_model
         UbiquitousUser::Config.user_model_new = @orig_config.user_model_new
-        UbiquitousUser::Config.user_model_save = @orig_config.user_model_save
-        UbiquitousUser::Config.user_model_name = @orig_config.user_model_name
       end
 
       should "create a new user object on #current_user" do
-        @user.expects(:new_record?).returns(true)
-        Person.expects(:new_person).returns(@user)
-        assert_equal @user, @controller.current_user
-        assert_equal @user, @controller.ubiquitous_user
-      end
-
-      should "set user on current_user=" do
-        user_id = 45
-        user_name = "Alex"
-        @user.expects(:id).returns(user_id)
-        @user.expects(:full_name).returns(user_name)
-
-        @controller.current_user = @user
-
-        assert_equal @user, @controller.ubiquitous_user
-        assert_equal user_id, @controller.session[:user_id]
-        assert_equal user_name, @controller.session[:user_name]
+        person = @controller.current_user
+        assert_equal Person, person.class
       end
     end
   end

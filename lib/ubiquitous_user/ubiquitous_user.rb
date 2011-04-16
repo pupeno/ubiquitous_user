@@ -41,15 +41,15 @@ module UbiquitousUser
 
       # If the object is new, let's get ready to mark the user as logged in when saving.
       if @ubiquitous_user.new_record? or @ubiquitous_user.id != session[:user_id]
-        controller = self
-        # Read more about this technique on http://stackoverflow.com/questions/2495550/define-a-method-that-is-a-closure-in-ruby
-        klass = class << @ubiquitous_user;
-          self;
+        if !@ubiquitous_user.respond_to? :mark_user_as_logged_in_in_the_session
+          UbiquitousUser::Config::user_model_class.class_eval do
+            after_save :mark_user_as_logged_in_in_the_session
+            def mark_user_as_logged_in_in_the_session
+              @session_reference_by_ubiquitous_user[:user_id] = id
+            end
+          end
         end
-        klass.send(:define_method, :after_save) do
-          super
-          controller.session[:user_id] = self.id
-        end
+        @ubiquitous_user.instance_variable_set "@session_reference_by_ubiquitous_user", self.session
       end
 
       return @ubiquitous_user
