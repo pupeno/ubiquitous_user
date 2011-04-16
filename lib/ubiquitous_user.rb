@@ -50,33 +50,10 @@ module UsableHelpers
 
     return @ubiquitous_user
   end
-  
-  # Helper method to check whether a user is logged in or not
-  def user_logged_in?
-    user_id = session[:user_id]
-    user_id != nil and UsableConfig::user_model_class.find_by_id(user_id) != nil and session[:user_name] != nil
-  end
 end
 
 ActionController::Base.class_eval do
   helper UsableHelpers
-end
-
-module UsableClass
-  def authorize(message = "Please log in.", key = :warning)
-    Proc.new do |controller|
-      unless controller.user_logged_in?
-        # flash, redirect_to and new_session_url are protected. Thank god this is Ruby, not Java.
-        controller.send(:flash)[key] = message
-        begin
-          controller.send(:redirect_to, :back)
-        rescue ActionController::RedirectBackError
-          controller.send(:redirect_to, controller.send(:new_session_url))
-        end
-      end
-    end
-  end
-  module_function :authorize
 end
 
 module Usable
@@ -87,8 +64,5 @@ module Usable
     session[:user_name] = new_user != nil ? new_user.send(UsableConfig::user_model_name) : nil
     @ubiquitous_user = new_user
   end
-  
-  def authorize
-    ::UsableClass.authorize().call(self)
-  end
 end
+
