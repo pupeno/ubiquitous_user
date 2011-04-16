@@ -1,59 +1,32 @@
-# coding: utf-8
-# Copyright 2010 J. Pablo Fernández
+# -*- encoding: utf-8 -*-
+# Copyright © 2011, José Pablo Fernández
 
-require 'rubygems'
-require 'rake'
+$:.unshift File.expand_path("../lib", __FILE__)
+require "ubiquitous_user/version"
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "ubiquitous_user"
-    gem.summary = "Helpers to get and retrieve users ubiquitously"
-    gem.description = "Create accounts for users right away, even when they are anonymous."
-    gem.email = "pupeno@pupeno.com"
-    gem.homepage = "http://github.com/pupeno/ubiquitous_user"
-    gem.authors = ["J. Pablo Fernández"]
-    gem.add_dependency "actionpack", ">= 2.0.0"
-    gem.files = %w(LICENSE README.rdoc Rakefile VERSION) + Dir.glob("{lib,generators}/**/*")
-    #gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
-end
+require "bundler"
+Bundler::GemHelper.install_tasks
 
-require 'rake/testtask'
+require "rake/testtask"
 Rake::TestTask.new(:test) do |test|
-  test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
+  test.libs << "lib" << "test"
+  test.pattern = "test/**/test_*.rb"
+  test.verbose = true
+end
+task :default => :test
+
+require "rcov/rcovtask"
+Rcov::RcovTask.new do |test|
+  test.libs << "test"
+  test.pattern = "test/**/test_*.rb"
   test.verbose = true
 end
 
-begin
-  require 'rcov/rcovtask'
-  Rcov::RcovTask.new do |test|
-    test.libs << 'test'
-    test.pattern = 'test/**/test_*.rb'
-    test.verbose = true
-  end
-rescue LoadError
-  task :rcov do
-    abort "RCov is not available. In order to run rcov, you must: sudo gem install spicycode-rcov"
-  end
-end
-
-task :test => :check_dependencies
-
-task :default => :test
-
-require 'rake/rdoctask'
+require "rake/rdoctask"
 Rake::RDocTask.new do |rdoc|
-  version = File.exist?('VERSION') ? File.read('VERSION') : ""
-
-  rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "Ubiquitous User #{version}"
-  rdoc.rdoc_files.include('README*')
-  rdoc.rdoc_files.include('LICENSE')
-  rdoc.rdoc_files.include('lib/**/*.rb')
+  rdoc.rdoc_dir = "rdoc"
+  rdoc.title = "Ubiquitous User #{UbiquitousUser::VERSION}"
+  rdoc.rdoc_files.include("README*")
+  rdoc.rdoc_files.include("LICENSE")
+  rdoc.rdoc_files.include("lib/**/*.rb")
 end
