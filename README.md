@@ -43,35 +43,35 @@ How to use it
 In your application_controller.rb be sure to add the mixin to
 ApplicationController, like this:
 
-  class ApplicationController < ActionController::Base
-    include UbiquitousUser::Usable
+    class ApplicationController < ActionController::Base
+      include UbiquitousUser::Usable
     
-    #...
-  end
+      #...
+    end
 
 After that you can use user anywhere, for example:
 
-  @item.recommender = current_user
+    @item.recommender = current_user
 
 or
 
-  <%=h current_user.name %>
+    <%=h current_user.name %>
 
 You can use current_user= in the controllers, for example:
 
-  class SessionsController < ApplicationController
-    def destroy
-      self.current_user = nil
+    class SessionsController < ApplicationController
+      def destroy
+        self.current_user = nil
+        # ...
+      end
+      
+      def create
+        # ...
+        self.current_user = user
+      end
+      
       # ...
     end
-    
-    def create
-      # ...
-      self.current_user = user
-    end
-    
-    # ...
-  end
 
 
 The model
@@ -80,7 +80,7 @@ The model
 Ubiquitous User expects you to have a model for your users called User
 (configurable). You could create such a model with the following command:
 
-  ./script/generate model User
+    rails generate model User
 
 
 Configuration
@@ -89,8 +89,8 @@ Configuration
 If your user model is not called User or the method to create a new one isn't
 :new, then you can configure Ubiquity User to work with the alternatives:
 
-  UbiquitousUser::Config::user_model = :User
-  UbiquitousUser::Config::user_model_new = :new
+    UbiquitousUser::Config::user_model = :User
+    UbiquitousUser::Config::user_model_new = :new
 
 
 API Documentation
