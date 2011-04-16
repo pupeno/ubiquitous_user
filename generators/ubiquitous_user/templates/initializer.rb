@@ -2,5 +2,3 @@
 
 # UbiquitousUser::Config::user_model = :User
 # UbiquitousUser::Config::user_model_new = :new
-# UbiquitousUser::Config::user_model_save = :save!
-# UbiquitousUser::Config::user_model_name = :name

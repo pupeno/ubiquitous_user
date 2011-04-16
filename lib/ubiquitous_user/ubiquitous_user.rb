@@ -5,8 +5,6 @@ module UbiquitousUser
   module Config
     @user_model = :User
     @user_model_new = :new
-    @user_model_save = :save!
-    @user_model_name = :name
 
     # Class that defines the user model.
     attr_accessor :user_model
@@ -14,12 +12,6 @@ module UbiquitousUser
     # Method used to create a new user, of class user_model
     attr_accessor :user_model_new
     module_function :user_model_new, :user_model_new=
-    # Method used to save the user.
-    attr_accessor :user_model_save
-    module_function :user_model_save, :user_model_save=
-    # Method used to get the name of the user.
-    attr_accessor :user_model_name
-    module_function :user_model_name, :user_model_name=
 
     def user_model_class # :nodoc:
       Object.const_get(user_model)
@@ -44,8 +36,11 @@ module UbiquitousUser
         if !@ubiquitous_user.respond_to? :mark_user_as_logged_in_in_the_session
           UbiquitousUser::Config::user_model_class.class_eval do
             after_save :mark_user_as_logged_in_in_the_session
+
             def mark_user_as_logged_in_in_the_session
-              @session_reference_by_ubiquitous_user[:user_id] = id
+              if !@session_reference_by_ubiquitous_user.nil?
+                @session_reference_by_ubiquitous_user[:user_id] = id
+              end
             end
           end
         end
@@ -66,7 +61,6 @@ module UbiquitousUser
 
     def current_user=(new_user)
       session[:user_id] = new_user != nil ? new_user.id : nil
-      session[:user_name] = new_user != nil ? new_user.send(UbiquitousUser::Config::user_model_name) : nil
       @ubiquitous_user = new_user
     end
   end
